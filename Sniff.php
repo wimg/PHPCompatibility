@@ -57,7 +57,6 @@ abstract class PHPCompatibility_Sniff implements PHP_CodeSniffer_Sniff
         'hash'           => 1,
     );
 
-
     /**
      * List of functions which take an ini directive as parameter (always the first parameter).
      *
@@ -70,6 +69,16 @@ abstract class PHPCompatibility_Sniff implements PHP_CodeSniffer_Sniff
         'ini_get' => 1,
         'ini_set' => 1,
     );
+
+    /**
+     * Internal cache of the results of the `getFunctionCallParameters()` method.
+     *
+     * The results are stored in a multi-dimensional array by filename and $stackPtr of
+     * the function call/array token.
+     *
+     * @var array
+     */
+    private $getFunctionCallParametersCache = array();
 
 
     /**
@@ -478,7 +487,15 @@ abstract class PHPCompatibility_Sniff implements PHP_CodeSniffer_Sniff
      */
     public function getFunctionCallParameters(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
+        $currentFile = $phpcsFile->getFilename();
+
+        // Check if this function call/array has been parsed before and if so, use the cached results.
+        if (isset($this->getFunctionCallParametersCache[$currentFile][$stackPtr]) === true) {
+            return $this->getFunctionCallParametersCache[$currentFile][$stackPtr];
+        }
+
         if ($this->doesFunctionCallHaveParameters($phpcsFile, $stackPtr) === false) {
+            $this->getFunctionCallParametersCache[$currentFile][$stackPtr] = array();
             return array();
         }
 
@@ -551,6 +568,9 @@ abstract class PHPCompatibility_Sniff implements PHP_CodeSniffer_Sniff
             $paramStart = $nextComma + 1;
             $cnt++;
         }
+
+        // Cache the results.
+        $this->getFunctionCallParametersCache[$currentFile][$stackPtr] = $parameters;
 
         return $parameters;
     }
