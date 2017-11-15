@@ -1,41 +1,26 @@
 <?php
 /**
- * PHPCompatibility, an external standard for PHP_CodeSniffer.
+ * \PHPCompatibility\Sniffs\PHP\NewExtensionsSniff.
  *
- * @package   PHPCompatibility
- * @copyright 2012-2020 PHPCompatibility Contributors
- * @license   https://opensource.org/licenses/LGPL-3.0 LGPL3
- * @link      https://github.com/PHPCompatibility/PHPCompatibility
+ * @category PHP
+ * @package  PHPCompatibility
+ * @author   Juliette Reinders Folmer <phpcompatibility_nospam@adviesenzo.nl>
  */
 
-namespace PHPCompatibility\Sniffs\Extensions;
+namespace PHPCompatibility\Sniffs\PHP;
 
-use PHPCompatibility\AbstractRemovedFeatureSniff;
-use PHP_CodeSniffer_File as File;
-use PHP_CodeSniffer_Tokens as Tokens;
+use PHPCompatibility\AbstractNewFeatureSniff;
 
 /**
- * Detect the use of deprecated and/or removed PHP extensions.
+ * \PHPCompatibility\Sniffs\PHP\NewExtensionsSniff.
  *
- * This sniff examines function calls made and flags function calls to functions
- * prefixed with the dedicated prefix from a deprecated/removed native PHP extension.
+ * Detect use of PHP extensions which were not available in older PHP versions.
  *
- * Suggests alternative extensions if available.
- *
- * As userland functions may be prefixed with a prefix also used by a native
- * PHP extension, the sniff offers the ability to whitelist specific functions
- * from being flagged by this sniff via a property in a custom ruleset
- * (since PHPCompatibility 7.0.2).
- *
- * {@internal This sniff is a candidate for removal once all functions from all
- * deprecated/removed extensions have been added to the RemovedFunctions sniff.}
- *
- * PHP version All
- *
- * @since 5.5
- * @since 7.1.0 Now extends the `AbstractRemovedFeatureSniff` instead of the base `Sniff` class.
+ * @category PHP
+ * @package  PHPCompatibility
+ * @author   Juliette Reinders Folmer <phpcompatibility_nospam@adviesenzo.nl>
  */
-class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
+class NewExtensionsSniff extends AbstractNewFeatureSniff
 {
     /**
      * A list of functions to whitelist, if any.
@@ -44,29 +29,85 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
      * prefix as one of the removed extensions.
      *
      * This property can be set from the ruleset, like so:
-     * <rule ref="PHPCompatibility.Extensions.RemovedExtensions">
+     * <rule ref="PHPCompatibility.PHP.RemovedExtensions">
      *   <properties>
      *     <property name="functionWhitelist" type="array" value="mysql_to_rfc3339,mysql_another_function" />
      *   </properties>
      * </rule>
-     *
-     * @since 7.0.2
      *
      * @var array
      */
     public $functionWhitelist;
 
     /**
-     * A list of removed extensions with their alternative, if any.
+     * A list of new PHP extensions.
      *
-     * The array lists : version number with false (deprecated) and true (removed).
-     * If's sufficient to list the first version where the extension was deprecated/removed.
+     * The array lists : version number with false (available in PECL) and true (shipped with PHP).
+     * If's sufficient to list the first version where the extension was introduced.
      *
-     * @since 5.5
-     *
-     * @var array(string => array(string => bool|string|null))
+     * @var array(string|null)
      */
-    protected $removedExtensions = array(
+    protected $newExtensions = array(
+        'csprng' => array(
+            '7.0'      => true,
+            'prefixes' => array(
+                // Function prefix all functions: verified.
+                'random_', // In practice: only random_bytes, random_int
+                // NO ini settings
+                // NO constants
+            ),
+        ),
+        'fileinfo' => array(
+            '5.3'      => true,
+            'prefixes' => array(
+                // Function prefix all functions: verified.
+                'finfo_',
+                // Also function: mime_content_type()
+                // Class: finfo
+                // NO ini settings
+                // Constants prefix: FILEINFO_
+            ),
+        ),
+        'hash' => array(
+            '5.1.2'    => true,
+            'prefixes' => array(
+                // Function prefix: verified.
+                'hash_',
+                // Function `hash()` also exists!!!!
+                // NO ini settings
+                // 1 constant: HASH_HMAC
+            ),
+        ),
+        'opcache' => array(
+            '5.2'      => false,
+            '5.5'      => true,
+            'prefixes' => array(
+                // Function prefix all functions: verified.
+                'opcache_',
+                // ini prefix: `opcache.`
+                // NO constants
+            ),
+        ),
+        'password' => array(
+            '5.5'      => true,
+            'prefixes' => array(
+                // Function prefix all functions: verified.
+                'password_',
+                // NO ini settings
+                // 2 constants: PASSWORD_BCRYPT, PASSWORD_DEFAULT
+            ),
+        ),
+        'phar' => array(
+            '5.3'      => true,
+            'prefixes' => array(
+                // NO functions, only classes.
+                // ini prefix: `phar.`
+                // constants - all class constants: `Phar::`
+                // Classes: Phar, PharData, PharFileInfo, PharException
+            ),
+        ),
+
+/*
         'activescript' => array(
             '5.1' => true,
             'alternative' => 'pecl/activescript',
@@ -74,14 +115,6 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
         'cpdf' => array(
             '5.1' => true,
             'alternative' => 'pecl/pdflib',
-        ),
-        /* seen & verified */
-        'crack' => array(
-            '5.0' => true,
-            'alternative' => 'pecl/crack',
-            // No ini variables
-            // No constants
-            // Function prefix: crack_
         ),
         'dbase' => array(
             '5.3' => true,
@@ -93,13 +126,10 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             'alternative' => 'pecl/dbx',
             'separator' => '_', // Verified: all functions use separator.
         ),
-        /* seen & verified */
         'dio' => array(
             '5.1' => true,
             'alternative' => 'pecl/dio',
             'separator' => '_', // Verified: all functions use separator.
-            // No ini variables
-            // All constants start with F_, O_ or S_ ... bit too arbitrary
         ),
         'ereg' => array(
             '5.3' => false,
@@ -130,10 +160,6 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             '5.2' => true,
             'alternative' => null,
         ),
-        'ibase' => array(
-            '7.4' => true,
-            'alternative' => 'pecl/ibase',
-        ),
         'ingres' => array(
             '5.1' => true,
             'alternative' => 'pecl/ingres',
@@ -143,32 +169,14 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             '5.1' => true,
             'alternative' => null,
         ),
-        /* seen & verified */
         'mcrypt' => array(
             '7.1' => false,
-            '7.2' => true,
             'alternative' => 'openssl (preferred) or pecl/mcrypt once available',
             'separator' => '_', // Verified: all functions use separator, though there is also the mdecrypt_generic function.
-            // ini prefix: `mcrypt.`
-            // All constants start with MCRYPT_
-            // Functions prefix: `mcrypt_` and `mdecrypt_`
-
         ),
-        /* seen & verified */
         'mcve' => array(
             '5.1' => true,
-            'alternative' => 'pecl/mcve',
-            // No ini variables
-            // All constants start with M_ -> only five: M_PENDING, M_DONE, M_ERROR, M_FAIL, M_SUCCESS
-            // Function prefix: m_
-        ),
-        /* seen & verified */
-        'mimetype' => array(
-            '5.3' => true,
-            'alternative' => 'fileinfo',
-            // ini prefix: `mime_magic.`
-            // NO constants
-            // NO functions (at least none documented) ?
+            'alternative' => 'pecl/mvce',
         ),
         'ming' => array(
             '5.3' => true,
@@ -196,13 +204,10 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             'alternative' => 'mysqli',
             'separator' => '_', // Verified: all functions use separator.
         ),
-        /* seen & verified */
         'ncurses' => array(
             '5.3' => true,
             'alternative' => 'pecl/ncurses',
             'separator' => '_', // Verified: all functions use separator.
-            // No ini variables
-            // All constants start with NCURSES_
         ),
         'oracle' => array(
             '5.1' => true,
@@ -213,13 +218,9 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             'alternative' => null,
             'separator' => '_', // Verified: all functions use separator.
         ),
-        'pfpro_' => array(
-            '5.1' => true,
+        'pfpro' => array(
+            '5.3' => true,
             'alternative' => null,
-        ),
-        'recode' => array(
-            '7.4' => true,
-            'alternative' => 'iconv or mbstring',
         ),
         'sqlite' => array(
             '5.4' => true,
@@ -241,36 +242,30 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             'alternative' => 'pecl/ffi',
             'separator' => '_', // Verified: all functions use separator.
         ),
-        'wddx' => array(
-            '7.4' => true,
-            'alternative' => 'pecl/wddx',
-        ),
         'yp' => array(
             '5.1' => true,
             'alternative' => null,
             'separator' => '_', // Verified: all functions use separator.
         ),
+*/
     );
 
     /**
      * Returns an array of tokens this test wants to listen for.
-     *
-     * @since 5.5
      *
      * @return array
      */
     public function register()
     {
         // Handle case-insensitivity of function names.
-        $this->removedExtensions = \array_change_key_case($this->removedExtensions, \CASE_LOWER);
+        $this->newExtensions = $this->arrayKeysToLowercase($this->newExtensions);
 
-        return array(\T_STRING);
-    }
+        return array(T_STRING);
+
+    }//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
-     *
-     * @since 5.5
      *
      * @param \PHP_CodeSniffer_File $phpcsFile The file being scanned.
      * @param int                   $stackPtr  The position of the current token in the
@@ -278,14 +273,15 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
      *
      * @return void
      */
-    public function process(File $phpcsFile, $stackPtr)
+    public function process(\PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
+/*
         $tokens = $phpcsFile->getTokens();
 
         // Find the next non-empty token.
-        $openBracket = $phpcsFile->findNext(Tokens::$emptyTokens, ($stackPtr + 1), null, true);
+        $openBracket = $phpcsFile->findNext(\PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
 
-        if ($tokens[$openBracket]['code'] !== \T_OPEN_PARENTHESIS) {
+        if ($tokens[$openBracket]['code'] !== T_OPEN_PARENTHESIS) {
             // Not a function call.
             return;
         }
@@ -296,20 +292,20 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
         }
 
         // Find the previous non-empty token.
-        $search   = Tokens::$emptyTokens;
-        $search[] = \T_BITWISE_AND;
+        $search   = \PHP_CodeSniffer_Tokens::$emptyTokens;
+        $search[] = T_BITWISE_AND;
         $previous = $phpcsFile->findPrevious($search, ($stackPtr - 1), null, true);
-        if ($tokens[$previous]['code'] === \T_FUNCTION) {
+        if ($tokens[$previous]['code'] === T_FUNCTION) {
             // It's a function definition, not a function call.
             return;
         }
 
-        if ($tokens[$previous]['code'] === \T_NEW) {
+        if ($tokens[$previous]['code'] === T_NEW) {
             // We are creating an object, not calling a function.
             return;
         }
 
-        if ($tokens[$previous]['code'] === \T_OBJECT_OPERATOR) {
+        if ($tokens[$previous]['code'] === T_OBJECT_OPERATOR) {
             // We are calling a method of an object.
             return;
         }
@@ -331,15 +327,14 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
                 break;
             }
         }
-    }
+*/
+    }//end process()
 
 
     /**
      * Is the current function being checked whitelisted ?
      *
      * Parsing the list late as it may be provided as a property, but also inline.
-     *
-     * @since 7.0.2
      *
      * @param string $content Content of the current token.
      *
@@ -351,7 +346,7 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             return false;
         }
 
-        if (\is_string($this->functionWhitelist) === true) {
+        if (is_string($this->functionWhitelist) === true) {
             if (strpos($this->functionWhitelist, ',') !== false) {
                 $this->functionWhitelist = explode(',', $this->functionWhitelist);
             } else {
@@ -359,19 +354,17 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
             }
         }
 
-        if (\is_array($this->functionWhitelist) === true) {
+        if (is_array($this->functionWhitelist) === true) {
             $this->functionWhitelist = array_map('strtolower', $this->functionWhitelist);
-            return \in_array($content, $this->functionWhitelist, true);
+            return in_array($content, $this->functionWhitelist, true);
         }
 
         return false;
-    }
+    }//end isWhiteListed()
 
 
     /**
      * Get the relevant sub-array for a specific item from a multi-dimensional array.
-     *
-     * @since 7.1.0
      *
      * @param array $itemInfo Base information about the item.
      *
@@ -386,12 +379,12 @@ class RemovedExtensionsSniff extends AbstractRemovedFeatureSniff
     /**
      * Get the error message template for this sniff.
      *
-     * @since 7.1.0
-     *
      * @return string
      */
     protected function getErrorMsgTemplate()
     {
         return "Extension '%s' is ";
     }
-}
+
+
+}//end class
