@@ -40,7 +40,7 @@ stages:
   - name: test
     if: branch IN (master, develop)
   - name: coverage
-    if: branch IN (master, develop)
+    #if: branch IN (master, develop)
 
 jobs:
   fast_finish: true
