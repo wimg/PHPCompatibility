@@ -21,7 +21,8 @@ php:
 env:
   global:
     - PHPUNIT_VERSION="travis"
-  matrix:
+    - COVERALLS_PARALLEL=true
+  jobs:
     # `master`, i.e PHPCS 3.x.
     - PHPCS_VERSION="dev-master" LINT=1
     # Lowest supported PHPCS version.
@@ -219,3 +220,6 @@ after_success:
     if [[ "$TRAVIS_BUILD_STAGE_NAME" == "Coverage" && $COVERALLS_VERSION == "^2.0" ]]; then
       php vendor/bin/php-coveralls -v -x build/logs/clover.xml
     fi
+
+notifications:
+  webhooks: https://coveralls.io/webhook
