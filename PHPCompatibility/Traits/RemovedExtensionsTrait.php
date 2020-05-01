@@ -30,7 +30,141 @@ trait RemovedExtensionsTrait
      * @var array(string => array(string => bool|string|null))
      */
     public $removedExtensions = array(
-
+        'cpdf' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/pdflib',
+        ),
+        'crack' => array(
+            '5.0'         => true,
+            'alternative' => 'pecl/crack',
+        ),
+        'dbase' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/dbase',
+        ),
+        'dbx' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/dbx',
+        ),
+        'dio' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/dio',
+        ),
+        'ereg' => array(
+            '5.3'         => false,
+            '7.0'         => true,
+            'alternative' => 'pcre',
+        ),
+        'fam' => array(
+            '5.1' => true,
+        ),
+        'fbsql' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/fbsql',
+        ),
+        'fdf' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/fdf',
+        ),
+        'filepro' => array(
+            '5.2'         => true,
+            'alternative' => 'pecl/filepro',
+        ),
+        'hwapi' => array(
+            '5.2'         => true,
+            'alternative' => 'pecl/hwapi',
+        ),
+        'ibase' => array(
+            '7.4'         => true,
+            'alternative' => 'pecl/ibase',
+        ),
+        'ifx' => array(
+            '5.2.1'       => true,
+            'alternative' => 'pecl/ifx',
+        ),
+        'ingres' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/ingres',
+        ),
+        'ircg' => array(
+            '5.1' => true,
+        ),
+        'mcrypt' => array(
+            '7.1'         => false,
+            '7.2'         => true,
+            'alternative' => 'the sodium or openssl extensions (preferred) or pecl/mcrypt',
+        ),
+        'mcve' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/mcve',
+        ),
+        'mimetype' => array(
+            '5.3'         => true,
+            'alternative' => 'fileinfo',
+        ),
+        'ming' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/ming',
+        ),
+        'mnogosearch' => array(
+            '5.1' => true,
+        ),
+        'msession' => array(
+            '5.1.3'       => true,
+            'alternative' => 'pecl/msession',
+        ),
+        'msql' => array(
+            '5.3' => true,
+        ),
+        'mssql' => array(
+            '7.0' => true,
+        ),
+        'mysql' => array(
+            '5.5'         => false,
+            '7.0'         => true,
+            'alternative' => 'mysqli',
+        ),
+        'ncurses' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/ncurses',
+        ),
+        'oracle' => array(
+            '5.1'         => true,
+            'alternative' => 'oci8 or pdo_oci',
+        ),
+        'ovrimos' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/ovrimos',
+        ),
+        'pfpro' => array(
+            '5.1' => true,
+        ),
+        'recode' => array(
+            '7.4'         => true,
+            'alternative' => 'iconv or mbstring',
+        ),
+        'sqlite' => array(
+            '5.4'         => true,
+            'alternative' => 'sqlite3, PDO sqlite or pecl/sqlite',
+        ),
+        /*
+         * This also covers sybase_ct.
+         * The sybase extension was removed in 5.3, sybase_ct in 7.0 but function names were identical.
+         */
+        'sybase' => array(
+            '7.0' => true,
+        ),
+        'w32api' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/ffi',
+        ),
+        'wddx' => array(
+            '7.4'         => true,
+            'alternative' => 'pecl/wddx',
+        ),
+        'yp' => array(
+            '5.1' => true,
+        ),
     );
 
     /**

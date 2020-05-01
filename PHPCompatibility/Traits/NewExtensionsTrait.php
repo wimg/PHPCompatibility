@@ -30,7 +30,106 @@ trait NewExtensionsTrait
      * @var array(string => array(string => bool|string|null))
      */
     public $newExtensions = array(
-
+        'csprng' => array(
+            '7.0'         => true,
+            'alternative' => 'https://github.com/paragonie/random_compat',
+        ),
+        'dom' => array(
+            '5.0' => true,
+        ),
+        'enchant' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/enchant',
+        ),
+        'ffi' => array(
+            '7.4' => true,
+        ),
+        'fileinfo' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/fileinfo',
+        ),
+        'filter' => array(
+            '5.2' => true,
+        ),
+        'fpm' => array(
+            '5.3.3' => true,
+        ),
+        'hash' => array(
+            '5.1.2'       => true,
+            'alternative' => 'pecl/hash',
+        ),
+        'intl' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/intl',
+        ),
+        'json' => array(
+            '5.2' => true,
+        ),
+        'libxml' => array(
+            '5.1' => true,
+        ),
+        'mysqli' => array(
+            '5.0'         => true,
+            'alternative' => 'mysql',
+        ),
+        'mysqlnd' => array(
+            '5.3' => true,
+        ),
+        'opcache' => array(
+            '5.5'         => true,
+            'alternative' => 'pecl/opcache',
+        ),
+        'password' => array(
+            '5.5'         => true,
+            'alternative' => 'https://github.com/ircmaxell/password_compat',
+        ),
+        'pdo' => array(
+            '5.1' => true,
+        ),
+        'phar' => array(
+            '5.3'         => true,
+            'alternative' => 'pecl/phar',
+        ),
+        'phpdbg' => array(
+            '5.6' => true,
+        ),
+        'reflection' => array(
+            '5.0' => true,
+        ),
+        'simplexml' => array(
+            '5.0' => true,
+        ),
+        'soap' => array(
+            '5.0' => true,
+        ),
+        'sodium' => array(
+            '7.2'         => true,
+            'alternative' => 'pecl/libsodium or https://github.com/paragonie/sodium_compat/',
+        ),
+        'spl' => array(
+            '5.0' => true,
+        ),
+        'sqlite' => array(
+            '5.0' => true,
+        ),
+        'sqlite3' => array(
+            '5.3'         => true,
+            'alternative' => 'sqlite',
+        ),
+        'tidy' => array(
+            '5.0' => true,
+        ),
+        'xmlreader' => array(
+            '5.1'         => true,
+            'alternative' => 'pecl/xmlreader',
+        ),
+        'xmlwriter' => array(
+            '5.1.2'       => true,
+            'alternative' => 'pecl/xmlwriter',
+        ),
+        'xsl' => array(
+            '5.0' => true,
+        ),
     );
 
     /**
