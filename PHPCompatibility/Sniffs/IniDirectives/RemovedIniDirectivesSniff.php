@@ -11,6 +11,7 @@
 namespace PHPCompatibility\Sniffs\IniDirectives;
 
 use PHPCompatibility\AbstractRemovedFeatureSniff;
+use PHPCompatibility\Traits\RemovedExtensionsTrait;
 use PHP_CodeSniffer_File as File;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
@@ -32,14 +33,21 @@ use PHPCSUtils\Utils\TextStrings;
  */
 class RemovedIniDirectivesSniff extends AbstractRemovedFeatureSniff
 {
+    use RemovedExtensionsTrait;
+
     /**
      * A list of deprecated/removed INI directives.
      *
      * The array lists : version number with false (deprecated) and true (removed).
      * If's sufficient to list the first version where the ini directive was deprecated/removed.
      *
+     * The optional `extension` key should be used to list the name of the extension
+     * the ini directive comes from if this ini is part of a removed extension and should
+     * match the array in the RemovedExtensionsTrait.
+     *
      * @since 5.5
-     * @since 7.0.3 Support for 'alternative' has been added.
+     * @since 7.0.3  Support for 'alternative' has been added.
+     * @since 10.0.0 Support for 'extension' has been added.
      *
      * @var array(string)
      */

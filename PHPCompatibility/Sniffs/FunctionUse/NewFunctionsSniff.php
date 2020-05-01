@@ -11,6 +11,7 @@
 namespace PHPCompatibility\Sniffs\FunctionUse;
 
 use PHPCompatibility\AbstractNewFeatureSniff;
+use PHPCompatibility\Traits\NewExtensionsTrait;
 use PHP_CodeSniffer_File as File;
 use PHP_CodeSniffer_Tokens as Tokens;
 
@@ -26,18 +27,25 @@ use PHP_CodeSniffer_Tokens as Tokens;
  */
 class NewFunctionsSniff extends AbstractNewFeatureSniff
 {
+    use NewExtensionsTrait;
+
     /**
      * A list of new functions, not present in older versions.
      *
      * The array lists : version number with false (not present) or true (present).
      * If's sufficient to list the first version where the function appears.
      *
+     * The optional `extension` key should be used to list the name of the extension
+     * the function comes from if this function is part of a new extension and should
+     * match the array in the NewExtensionsTrait.
+     *
      * @since 5.5
-     * @since 5.6   Visibility changed from `protected` to `public`.
-     * @since 7.0.2 Visibility changed back from `public` to `protected`.
-     *              The earlier change was made to be in line with the upstream sniff,
-     *              but that sniff is no longer being extended.
-     * @since 7.0.8 Renamed from `$forbiddenFunctions` to the more descriptive `$newFunctions`.
+     * @since 5.6    Visibility changed from `protected` to `public`.
+     * @since 7.0.2  Visibility changed back from `public` to `protected`.
+     *               The earlier change was made to be in line with the upstream sniff,
+     *               but that sniff is no longer being extended.
+     * @since 7.0.8  Renamed from `$forbiddenFunctions` to the more descriptive `$newFunctions`.
+     * @since 10.0.0 Support for 'extension' has been added.
      *
      * @var array(string => array(string => bool))
      */

@@ -11,6 +11,7 @@
 namespace PHPCompatibility\Sniffs\Classes;
 
 use PHPCompatibility\AbstractRemovedFeatureSniff;
+use PHPCompatibility\Traits\RemovedExtensionsTrait;
 use PHP_CodeSniffer_File as File;
 
 /**
@@ -30,6 +31,7 @@ use PHP_CodeSniffer_File as File;
  */
 class RemovedClassesSniff extends AbstractRemovedFeatureSniff
 {
+    use RemovedExtensionsTrait;
 
     /**
      * A list of deprecated/removed classes, not present in older versions.

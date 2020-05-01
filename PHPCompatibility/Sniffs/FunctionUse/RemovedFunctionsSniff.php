@@ -11,6 +11,7 @@
 namespace PHPCompatibility\Sniffs\FunctionUse;
 
 use PHPCompatibility\AbstractRemovedFeatureSniff;
+use PHPCompatibility\Traits\RemovedExtensionsTrait;
 use PHP_CodeSniffer_File as File;
 use PHP_CodeSniffer_Tokens as Tokens;
 
@@ -29,18 +30,25 @@ use PHP_CodeSniffer_Tokens as Tokens;
  */
 class RemovedFunctionsSniff extends AbstractRemovedFeatureSniff
 {
+    use RemovedExtensionsTrait;
+
     /**
      * A list of deprecated and removed functions with their alternatives.
      *
      * The array lists : version number with false (deprecated) or true (removed) and an alternative function.
      * If no alternative exists, it is NULL, i.e, the function should just not be used.
      *
+     * The optional `extension` key should be used to list the name of the extension
+     * the function comes from if this function is part of a removed extension and should
+     * match the array in the RemovedExtensionsTrait.
+     *
      * @since 5.5
-     * @since 5.6   Visibility changed from `protected` to `public`.
-     * @since 7.0.2 Visibility changed back from `public` to `protected`.
-     *              The earlier change was made to be in line with the upstream sniff,
-     *              but that sniff is no longer being extended.
-     * @since 7.0.8 Property renamed from `$forbiddenFunctions` to `$removedFunctions`.
+     * @since 5.6    Visibility changed from `protected` to `public`.
+     * @since 7.0.2  Visibility changed back from `public` to `protected`.
+     *               The earlier change was made to be in line with the upstream sniff,
+     *               but that sniff is no longer being extended.
+     * @since 7.0.8  Property renamed from `$forbiddenFunctions` to `$removedFunctions`.
+     * @since 10.0.0 Support for 'extension' has been added.
      *
      * @var array(string => array(string => bool|string|null))
      */

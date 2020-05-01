@@ -11,6 +11,7 @@
 namespace PHPCompatibility\Sniffs\IniDirectives;
 
 use PHPCompatibility\AbstractNewFeatureSniff;
+use PHPCompatibility\Traits\NewExtensionsTrait;
 use PHP_CodeSniffer_File as File;
 use PHPCSUtils\Utils\PassedParameters;
 use PHPCSUtils\Utils\TextStrings;
@@ -30,14 +31,21 @@ use PHPCSUtils\Utils\TextStrings;
  */
 class NewIniDirectivesSniff extends AbstractNewFeatureSniff
 {
+    use NewExtensionsTrait;
+
     /**
      * A list of new INI directives
      *
      * The array lists : version number with false (not present) or true (present).
      * If's sufficient to list the first version where the ini directive appears.
      *
+     * The optional `extension` key should be used to list the name of the extension
+     * the ini directive comes from if this ini is part of a new extension and should
+     * match the array in the NewExtensionsTrait.
+     *
      * @since 5.5
-     * @since 7.0.3 Support for 'alternative' has been added.
+     * @since 7.0.3  Support for 'alternative' has been added.
+     * @since 10.0.0 Support for 'extension' has been added.
      *
      * @var array(string)
      */
@@ -944,7 +952,7 @@ class NewIniDirectivesSniff extends AbstractNewFeatureSniff
      */
     protected function getNonVersionArrayKeys()
     {
-        return array('alternative');
+        return array('alternative', 'extension');
     }
 
 

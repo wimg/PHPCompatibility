@@ -11,6 +11,7 @@
 namespace PHPCompatibility\Sniffs\Constants;
 
 use PHPCompatibility\AbstractNewFeatureSniff;
+use PHPCompatibility\Traits\NewExtensionsTrait;
 use PHP_CodeSniffer_File as File;
 
 /**
@@ -22,6 +23,7 @@ use PHP_CodeSniffer_File as File;
  */
 class NewConstantsSniff extends AbstractNewFeatureSniff
 {
+    use NewExtensionsTrait;
 
     /**
      * A list of new PHP Constants, not present in older versions.
@@ -29,9 +31,14 @@ class NewConstantsSniff extends AbstractNewFeatureSniff
      * The array lists : version number with false (not present) or true (present).
      * If's sufficient to list the first version where the constant appears.
      *
+     * The optional `extension` key should be used to list the name of the extension
+     * the constant comes from if this constant is part of a new extension and should
+     * match the array in the NewExtensionsTrait.
+     *
      * Note: PHP constants are case-sensitive!
      *
      * @since 8.1.0
+     * @since 10.0.0 Support for 'extension' has been added.
      *
      * @var array(string => array(string => bool))
      */
