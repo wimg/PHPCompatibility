@@ -11,7 +11,7 @@
 namespace PHPCompatibility\Traits;
 
 /**
- *
+ * Trait used in new extension sniffs
  */
 trait NewExtensionsTrait
 {

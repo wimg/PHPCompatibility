@@ -11,7 +11,7 @@
 namespace PHPCompatibility\Traits;
 
 /**
- *
+ * Trait used in removed extension sniffs
  */
 trait RemovedExtensionsTrait
 {
