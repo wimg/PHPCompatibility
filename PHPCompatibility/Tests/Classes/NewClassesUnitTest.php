@@ -86,7 +86,7 @@ class NewClassesUnitTest extends BaseSniffTest
             array('ReflectionProperty', '4.4', array(362), '5.0'),
             array('SoapClient', '4.4', array(364), '5.0'),
             array('SoapServer', '4.4', array(365), '5.0'),
-            array('SoapHeader', '4.4', array(366), '5.0'),
+            array('SoapHeader', '4.4', array(367), '5.0'),
             array('SoapParam', '4.4', array(368), '5.0'),
             array('SoapVar', '4.4', array(369), '5.0'),
             array('COMPersistHelper', '4.4', array(371), '5.0'),
